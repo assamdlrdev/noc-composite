@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Services\Api\V1\UpsApiService;
+use App\Services\UpsApiService;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;

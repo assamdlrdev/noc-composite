@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Api\V1;
+namespace App\Services;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -14,7 +14,7 @@ class UpsApiService
     public function __construct()
     {
         $this->client = new Client([
-            'base_uri' => rtrim(config('elrs.UPS_base_url'), '/') . '/',
+            'base_uri' => rtrim(config('constants.UPS_BASE_URL'), '/') . '/',
             'timeout' => 30,
             'http_errors' => false,
         ]);
