@@ -158,6 +158,72 @@
                     }
                 }
             }
+        },
+        "/land/schedule/details": {
+            "post": {
+                "tags": [
+                    "Applications Details"
+                ],
+                "summary": "Get Land Schedule Details",
+                "description": "Fetches land schedule details based on the provided application number.",
+                "operationId": "27dbd21a5ae071694b0c6a55018568fc",
+                "parameters": [
+                    {
+                        "name": "app_no",
+                        "in": "query",
+                        "description": "Unique application number used to retrieve the land schedule details.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "nullable": true
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Land Schedule Details Retrieved Successfully"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/application/view": {
+            "post": {
+                "tags": [
+                    "Applications Details"
+                ],
+                "summary": "View application details",
+                "description": "Fetches application details using the application number. The API retrieves applicant information, associated land sale details, and the latest tracking status of the application.",
+                "operationId": "54cf90f634d1b0277ccebf757ece42dd",
+                "parameters": [
+                    {
+                        "name": "appno",
+                        "in": "query",
+                        "description": "Unique application number used to retrieve the application details.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "nullable": true
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Applications Details Retrieved Successfully"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -174,6 +240,10 @@
         {
             "name": "NOC Applications",
             "description": "NOC Applications"
+        },
+        {
+            "name": "Applications Details",
+            "description": "Applications Details"
         }
     ]
 }
