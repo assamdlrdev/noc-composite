@@ -159,14 +159,14 @@
                 }
             }
         },
-        "/land/schedule/details": {
+        "/land/details": {
             "post": {
                 "tags": [
                     "Applications Details"
                 ],
                 "summary": "Get Land Schedule Details",
                 "description": "Fetches land schedule details based on the provided application number.",
-                "operationId": "27dbd21a5ae071694b0c6a55018568fc",
+                "operationId": "9d53df0fc5bcb5c02c98ad5a5dec6375",
                 "parameters": [
                     {
                         "name": "app_no",
@@ -189,7 +189,12 @@
                     "500": {
                         "description": "Internal server error"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/application/view": {

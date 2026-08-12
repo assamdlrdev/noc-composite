@@ -16,10 +16,13 @@ class AppCommonController extends Controller
     //
 
     #[OA\Post(
-        path: '/land/schedule/details',
+        path: '/land/details',
         summary: 'Get Land Schedule Details',
         description: 'Fetches land schedule details based on the provided application number.',
         tags: ['Applications Details'],
+        security: [
+            ['bearerAuth' => []]
+        ],
         parameters: [
             new OA\Parameter(
                 name: 'app_no',

@@ -10,3 +10,6 @@ Route::post(
     '/noc/applications',
     [NocApplicationController::class, 'index']
 );
+
+
+Route::post('/land/details', [AppCommonController::class, 'landScheduleDetails'])->middleware('keyclock_auth');
