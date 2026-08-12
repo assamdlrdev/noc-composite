@@ -22,5 +22,6 @@ class AppServiceProvider extends ServiceProvider
         //
         require_once app_path('Helpers/jwt_helper.php');
         require_once app_path('Helpers/api_helper.php');
+        require_once app_path('Helpers/response_helper.php');
     }
 }
