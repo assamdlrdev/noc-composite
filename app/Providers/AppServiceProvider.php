@@ -20,5 +20,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
+        require_once app_path('Helpers/jwt_helper.php');
+        require_once app_path('Helpers/api_helper.php');
     }
 }

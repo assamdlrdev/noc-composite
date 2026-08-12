@@ -1,0 +1,12 @@
+<?php
+
+return [
+    'IS_PRODUCTION' => env('IS_PRODUCTION'),
+    'JWT_SECRET' => env('JWT_SECRET'),
+    'SMS_PVT_KEY' => env('SMS_PVT_KEY'),
+    'BHUNAKSHA_PRIVATE_KEY' => env('BHUNAKSHA_PRIVATE_KEY'),
+    'LANDHUB_DEMO_PVT_KEY' => env('LANDHUB_DEMO_PVT_KEY'),
+    'SMS_PROD_LINK' => env('SMS_PROD_LINK'),
+    'LANDHUB_BASE_URL' => env('LANDHUB_BASE_URL')
+
+];
