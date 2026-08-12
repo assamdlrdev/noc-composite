@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
         //
         $middleware->alias([
             'jwt' => \App\Http\Middleware\JwtMiddleware::class,
+            'keyclock_auth' => \App\Http\Middleware\JwtBearerAuth::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
