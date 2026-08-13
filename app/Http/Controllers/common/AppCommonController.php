@@ -7,13 +7,18 @@ use App\Models\LandScheduleModel;
 use App\Models\LspApplicant;
 use App\Models\LandSale;
 use App\Models\NocTrackApplication;
+use App\Services\ApplicationWorkflowService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use OpenApi\Attributes as OA;
 
 class AppCommonController extends Controller
 {
-    //
+
+    public function __construct(
+        private ApplicationWorkflowService $workflowService
+    ) {
+    }
 
     #[OA\Post(
         path: '/land/details',
@@ -70,20 +75,9 @@ class AppCommonController extends Controller
         summary: 'View application details',
         description: 'Fetches application details using the application number. The API retrieves applicant information, associated land sale details, and the latest tracking status of the application.',
         tags: ['Applications Details'],
-        // requestBody: new OA\RequestBody(
-        //     required: true,
-        //     content: new OA\JsonContent(
-        //         required: ['appno'],
-        //         properties: [
-        //             new OA\Property(
-        //                 property: 'appno',
-        //                 type: 'string',
-        //                 description: 'Unique application number used to retrieve the application details.',
-        //                 example: 'NOC/07/47255/2024'
-        //             )
-        //         ]
-        //     )
-        // ),
+        security: [
+            ['bearerAuth' => []]
+        ],
         parameters: [
             new OA\Parameter(
                 name: 'appno',
@@ -176,5 +170,55 @@ class AppCommonController extends Controller
                 'data' => []
             ], 500);
         }
+    }
+
+    #[OA\Post(
+        path: '/applications/workflow-status',
+        summary: 'View application workflow status.',
+        description: 'Fetches status/workflow details using the application number. The API retrieves all the details related to the workflow.',
+        tags: ['Applications Details'],
+        security: [
+            ['bearerAuth' => []]
+        ],
+        parameters: [
+            new OA\Parameter(
+                name: 'appno',
+                in: 'query',
+                description: 'Unique application number used to retrieve the application details.',
+                required: true,
+                schema: new OA\Schema(
+                    type: 'string',
+                    nullable: true
+                )
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Applications Details Retrieved Successfully',
+            ),
+            new OA\Response(
+                response: 422,
+                description: 'Validation error'
+            ),
+            new OA\Response(
+                response: 500,
+                description: 'Internal server error'
+            )
+        ]
+    )]
+    public function status(Request $request): JsonResponse
+    {
+        $request->validate([
+            'appno' => ['required', 'string', 'max:100'],
+        ]);
+        $appno = $request->input('appno');
+        $result = $this->workflowService->getWorkflowStatus($appno);
+
+        if (($result['exists'] ?? false) === false) {
+            return response()->json(errorResponse($result['message'], null), 404);
+        }
+
+        return response()->json(successResponse('Workflow status retrieved successfully.', $result), 200);
     }
 }

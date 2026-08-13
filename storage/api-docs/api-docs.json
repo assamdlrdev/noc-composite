@@ -21,9 +21,9 @@
                 "operationId": "92d2c7566b1306ac8351511ed80dd72b",
                 "parameters": [
                     {
-                        "name": "posting_uuid",
+                        "name": "posting_code",
                         "in": "query",
-                        "description": "UUID of the posting",
+                        "description": "Code of the posting",
                         "required": true,
                         "schema": {
                             "type": "string",
@@ -156,7 +156,12 @@
                     "500": {
                         "description": "Internal server error"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/land/details": {
@@ -227,7 +232,50 @@
                     "500": {
                         "description": "Internal server error"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/applications/workflow-status": {
+            "post": {
+                "tags": [
+                    "Applications Details"
+                ],
+                "summary": "View application workflow status.",
+                "description": "Fetches status/workflow details using the application number. The API retrieves all the details related to the workflow.",
+                "operationId": "f1a1179356a3a3c65676435052c4c1a8",
+                "parameters": [
+                    {
+                        "name": "appno",
+                        "in": "query",
+                        "description": "Unique application number used to retrieve the application details.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "nullable": true
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Applications Details Retrieved Successfully"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         }
     },

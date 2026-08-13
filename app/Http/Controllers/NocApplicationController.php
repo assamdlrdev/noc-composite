@@ -15,11 +15,14 @@ class NocApplicationController extends Controller
         path: '/noc/applications',
         summary: 'Get NOC applications for a posting',
         tags: ['NOC Applications'],
+        security: [
+            ['bearerAuth' => []]
+        ],
         parameters: [
             new OA\Parameter(
-                name: 'posting_uuid',
+                name: 'posting_code',
                 in: 'query',
-                description: 'UUID of the posting',
+                description: 'Code of the posting',
                 required: true,
                 schema: new OA\Schema(
                     type: 'string',
@@ -172,7 +175,7 @@ class NocApplicationController extends Controller
     {
         try {
             $validated = $request->validate([
-                'posting_uuid' => ['required', 'string'],
+                'posting_code' => ['required', 'string'],
                 'filter' => ['nullable', 'string'],
                 'search' => ['nullable', 'string'],
                 'page' => ['nullable', 'integer', 'min:1'],
@@ -186,7 +189,7 @@ class NocApplicationController extends Controller
                 'lotno' => ['nullable', 'string'],
                 'villcode' => ['nullable', 'string'],
             ]);
-            $postingUuid = trim($validated['posting_uuid']);
+            $postingCode = trim($validated['posting_code']);
             $filter = $validated['filter'] ?? 'inbox';
             $search = trim($validated['search'] ?? '');
             $page = (int) ($validated['page'] ?? 1);
@@ -232,12 +235,12 @@ class NocApplicationController extends Controller
             ")
                 ->where('ls.compserv', 'Y')
                 ->where('ls.epay', 'Y')
-                ->where('nta.posting_code', $postingUuid);
+                ->where('nta.posting_code', $postingCode);
             $countQuery = DB::table('landsale as ls')
                 ->join('noc_track_application as nta', 'nta.appno', '=', 'ls.appno')
                 ->where('ls.compserv', 'Y')
                 ->where('ls.epay', 'Y')
-                ->where('nta.posting_code', $postingUuid);
+                ->where('nta.posting_code', $postingCode);
             if ($search !== '') {
                 $base->where('ls.appno', 'like', '%' . $search . '%');
                 $countQuery->where('ls.appno', 'like', '%' . $search . '%');

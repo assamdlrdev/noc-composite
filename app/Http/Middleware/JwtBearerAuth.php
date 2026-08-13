@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Services\UpsApiService;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class JwtBearerAuth
@@ -15,9 +16,21 @@ class JwtBearerAuth
 
     public function handle(Request $request, Closure $next): Response
     {
+
+        Log::info('JwtBearerAuth Middleware: Request Details', [
+            'environment' => app()->environment(),
+            'is_dev' => app()->environment('dev'),
+            'path' => $request->path(),
+            'is_api' => $request->is('api/*'),
+        ]);
+        if (app()->environment('dev') && $request->is('api/*')) {
+            return $next($request);
+        }
         $token = $request->bearerToken();
-        $posting_code =  $request->posting_code;
+        $posting_code = $request->posting_code;
         // dd($posting_code);
+        Log::info('JwtBearerAuth Middleware: Bearer Token: ' . $token);
+        Log::info('JwtBearerAuth Middleware: Posting Code: ' . $posting_code);
         if (!$token) {
             return response()->json(errorResponse('Authorization Bearer token is required.'), 401);
         }
@@ -29,12 +42,12 @@ class JwtBearerAuth
         }
 
         try {
-            $responseMe = $this->upsService->getMe($token); 
+            $responseMe = $this->upsService->getMe($token);
             // dd($responseMe->json());
-            if(!$responseMe->successful()) {
+            if (!$responseMe->successful()) {
                 return response()->json(successResponse('Unauthorized.'), 401);
             }
-            
+
             $responseMyPostings = $this->upsService->getMyPostings($token);
             // dd($responseMyPostings->json());
             if (!$responseMyPostings->successful()) {
@@ -43,33 +56,33 @@ class JwtBearerAuth
 
             $is_correct_posting_code = false;
 
-            foreach($responseMyPostings->json('data', []) as $posting) {
-            // dd($posting);
+            foreach ($responseMyPostings->json('data', []) as $posting) {
+                // dd($posting);
                 if ($posting['posting']['posting_code'] === $posting_code) {
                     $posting_id = $posting['posting']['id'];
                     session(['posting_id' => $posting_id]);
                     session(['posting_code' => $posting_code]);
                     session(['token' => $token]);
                     session(['role_code' => $posting['posting']['role']['role_code']]);
-                    session(['keycloak_user_id'=> $responseMe->json()['keycloak_user_id']]);
-                    session(['reference_location_uuid'=> $posting['posting']['reference_location_uuid']]);
-                    session(['username'=> $responseMe->json()['full_name']]);
-                    session(['mobile_no'=> $responseMe->json()['mobile_no']]);
-                    session(['email'=> $responseMe->json()['email']]);
-                    session(['actor'=> $responseMe->json()]);
-                    session(['user_uuid'=> $responseMe->json()['user_uuid']]);
+                    session(['keycloak_user_id' => $responseMe->json()['keycloak_user_id']]);
+                    session(['reference_location_uuid' => $posting['posting']['reference_location_uuid']]);
+                    session(['username' => $responseMe->json()['full_name']]);
+                    session(['mobile_no' => $responseMe->json()['mobile_no']]);
+                    session(['email' => $responseMe->json()['email']]);
+                    session(['actor' => $responseMe->json()]);
+                    session(['user_uuid' => $responseMe->json()['user_uuid']]);
                     $is_correct_posting_code = true;
                     break;
                 }
             }
             //    dd(session('actor'));
-            if($is_correct_posting_code === false) {
+            if ($is_correct_posting_code === false) {
                 return response()->json(errorResponse('Unauthorized. No access to the specified posting.'), 401);
             }
             return $next($request);
 
-           
-            
+
+
         } catch (\Throwable $e) {
             return response()->json(successResponse('Unable to validate token at this time.'), 503);
         }
