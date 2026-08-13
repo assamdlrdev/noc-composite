@@ -12,4 +12,4 @@ Route::post(
 );
 
 
-Route::post('/land/details', [AppCommonController::class, 'landScheduleDetails'])->middleware('keyclock_auth');
+Route::post('/land/details', [AppCommonController::class, 'landScheduleDetails']);

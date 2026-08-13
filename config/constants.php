@@ -8,6 +8,8 @@ return [
     'LANDHUB_DEMO_PVT_KEY' => env('LANDHUB_DEMO_PVT_KEY'),
     'SMS_PROD_LINK' => env('SMS_PROD_LINK'),
     'LANDHUB_BASE_URL' => env('LANDHUB_BASE_URL'),
-    'UPS_BASE_URL' => env('UPS_BASE_URL')
-
+    'ELRS_BASE_URL' => env('ELRS_BASE_URL'),
+    'UPS_BASE_URL' => env('UPS_BASE_URL'),
+    'LOCATION_BASE_URL' => env('LOCATION_BASE_URL')
+    
 ];

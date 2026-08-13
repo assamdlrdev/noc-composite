@@ -14,7 +14,7 @@ class UpsApiService
     public function __construct()
     {
         $this->client = new Client([
-            'base_uri' => rtrim(config('constants.UPS_BASE_URL'), '/') . '/',
+            'base_uri' => rtrim(config('constants.ELRS_BASE_URL') . config('constants.UPS_BASE_URL'), '/') . '/',
             'timeout' => 30,
             'http_errors' => false,
         ]);
