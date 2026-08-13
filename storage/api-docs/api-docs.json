@@ -21,9 +21,9 @@
                 "operationId": "92d2c7566b1306ac8351511ed80dd72b",
                 "parameters": [
                     {
-                        "name": "posting_uuid",
+                        "name": "posting_code",
                         "in": "query",
-                        "description": "UUID of the posting",
+                        "description": "Code of the posting",
                         "required": true,
                         "schema": {
                             "type": "string",
@@ -156,7 +156,126 @@
                     "500": {
                         "description": "Internal server error"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/land/details": {
+            "post": {
+                "tags": [
+                    "Applications Details"
+                ],
+                "summary": "Get Land Schedule Details",
+                "description": "Fetches land schedule details based on the provided application number.",
+                "operationId": "9d53df0fc5bcb5c02c98ad5a5dec6375",
+                "parameters": [
+                    {
+                        "name": "app_no",
+                        "in": "query",
+                        "description": "Unique application number used to retrieve the land schedule details.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "nullable": true
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Land Schedule Details Retrieved Successfully"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/application/view": {
+            "post": {
+                "tags": [
+                    "Applications Details"
+                ],
+                "summary": "View application details",
+                "description": "Fetches application details using the application number. The API retrieves applicant information, associated land sale details, and the latest tracking status of the application.",
+                "operationId": "54cf90f634d1b0277ccebf757ece42dd",
+                "parameters": [
+                    {
+                        "name": "appno",
+                        "in": "query",
+                        "description": "Unique application number used to retrieve the application details.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "nullable": true
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Applications Details Retrieved Successfully"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/applications/workflow-status": {
+            "post": {
+                "tags": [
+                    "Applications Details"
+                ],
+                "summary": "View application workflow status.",
+                "description": "Fetches status/workflow details using the application number. The API retrieves all the details related to the workflow.",
+                "operationId": "f1a1179356a3a3c65676435052c4c1a8",
+                "parameters": [
+                    {
+                        "name": "appno",
+                        "in": "query",
+                        "description": "Unique application number used to retrieve the application details.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "nullable": true
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Applications Details Retrieved Successfully"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         }
     },
@@ -174,6 +293,10 @@
         {
             "name": "NOC Applications",
             "description": "NOC Applications"
+        },
+        {
+            "name": "Applications Details",
+            "description": "Applications Details"
         }
     ]
 }
