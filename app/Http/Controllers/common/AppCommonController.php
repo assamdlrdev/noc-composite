@@ -4,6 +4,8 @@ namespace App\Http\Controllers\common;
 
 use App\Http\Controllers\Controller;
 use App\Models\LandScheduleModel;
+use App\Models\BuyerModel;
+use App\Models\SellerModel;
 use App\Models\LspApplicant;
 use App\Models\LandSale;
 use App\Models\NocTrackApplication;
@@ -16,46 +18,6 @@ use OpenApi\Attributes as OA;
 class AppCommonController extends Controller
 {
 
-    public function __construct(
-        private ApplicationWorkflowService $workflowService
-    ) {
-    }
-
-    #[OA\Post(
-        path: '/land/details',
-        summary: 'Get Land Schedule Details',
-        description: 'Fetches land schedule details based on the provided application number.',
-        tags: ['Applications Details'],
-        security: [
-            ['bearerAuth' => []]
-        ],
-        parameters: [
-            new OA\Parameter(
-                name: 'app_no',
-                in: 'query',
-                description: 'Unique application number used to retrieve the land schedule details.',
-                required: true,
-                schema: new OA\Schema(
-                    type: 'string',
-                    nullable: true
-                )
-            ),
-        ],
-        responses: [
-            new OA\Response(
-                response: 200,
-                description: 'Land Schedule Details Retrieved Successfully',
-            ),
-            new OA\Response(
-                response: 422,
-                description: 'Validation error'
-            ),
-            new OA\Response(
-                response: 500,
-                description: 'Internal server error'
-            )
-        ]
-    )]
     public function landScheduleDetails(Request $request)
     {
 
@@ -68,9 +30,73 @@ class AppCommonController extends Controller
         $details = $commonModel->getLandScheduleDetails($app_no);
 
         return response()->json(successResponse('Successfully Retrieved Data!', $details), 200);
-
     }
 
+
+    // get buyer information 
+    public function getBuyerDetails(Request $request)
+    {
+        $request->validate([
+            'app_no' => 'required|string'
+        ]);
+
+        try {
+
+            $app_no = $request->app_no;
+
+            $details = BuyerModel::getBuyerInfoDB($app_no);
+
+            if (empty($details)) {
+                return response()->json(
+                    errorResponse('No buyer details found!', ''),
+                    200
+                );
+            }
+
+            return response()->json(
+                successResponse('Successfully Retrieved Data!', $details),
+                200
+            );
+        } catch (\Exception $e) {
+
+            return response()->json(
+                errorResponse('Something went wrong!', $e->getMessage()),
+                500
+            );
+        }
+    }
+      // get buyer information 
+      public function getSellerDetails(Request $request)
+      {
+          $request->validate([
+              'app_no' => 'required|string'
+          ]);
+  
+          try {
+  
+              $app_no = $request->app_no;
+  
+              $details = SellerModel::getSellerDetailsDB($app_no);
+  
+              if (empty($details)) {
+                  return response()->json(
+                      errorResponse('No buyer details found!', ''),
+                      200
+                  );
+              }
+  
+              return response()->json(
+                  successResponse('Successfully Retrieved Data!', $details),
+                  200
+              );
+          } catch (\Exception $e) {
+  
+              return response()->json(
+                  errorResponse('Something went wrong!', $e->getMessage()),
+                  500
+              );
+          }
+      }
     #[OA\Post(
         path: '/application/view',
         summary: 'View application details',
