@@ -7,6 +7,7 @@ use App\Models\LandScheduleModel;
 use App\Models\LspApplicant;
 use App\Models\LandSale;
 use App\Models\NocTrackApplication;
+use App\Models\services\CommonModel;
 use App\Services\ApplicationWorkflowService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -62,9 +63,9 @@ class AppCommonController extends Controller
 
         // DB::beginTransaction();
 
-        $getLandScheduleData = new LandScheduleModel();
+        $commonModel = new CommonModel();
 
-        $details = $getLandScheduleData->getDetails($app_no);
+        $details = $commonModel->getLandScheduleDetails($app_no);
 
         return response()->json(successResponse('Successfully Retrieved Data!', $details), 200);
 
