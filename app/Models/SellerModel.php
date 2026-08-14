@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\DB;
 class SellerModel extends Model
 {
     protected $table = "seller";
+    
+    public $timestamps = false;
+
+    protected $guarded = [];
 
 
     public static function getSellerDetailsDB($app_no)

@@ -3,6 +3,7 @@
 return [
     'IS_PRODUCTION' => env('IS_PRODUCTION'),
     'JWT_SECRET' => env('JWT_SECRET'),
+    'API_SERVICE_TOKEN' => env('API_SERVICE_TOKEN'),
     'SMS_PVT_KEY' => env('SMS_PVT_KEY'),
     'BHUNAKSHA_PRIVATE_KEY' => env('BHUNAKSHA_PRIVATE_KEY'),
     'LANDHUB_DEMO_PVT_KEY' => env('LANDHUB_DEMO_PVT_KEY'),
@@ -10,6 +11,6 @@ return [
     'LANDHUB_BASE_URL' => env('LANDHUB_BASE_URL'),
     'ELRS_BASE_URL' => env('ELRS_BASE_URL'),
     'UPS_BASE_URL' => env('UPS_BASE_URL'),
-    'LOCATION_BASE_URL' => env('LOCATION_BASE_URL')
-    
+    'LOCATION_BASE_URL' => env('LOCATION_BASE_URL'),
+    'MASTER_BASE_URL' => env('MASTER_BASE_URL')
 ];

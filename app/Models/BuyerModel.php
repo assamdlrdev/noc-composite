@@ -9,6 +9,10 @@ class BuyerModel extends Model
 {
     protected $table = "buyer";
 
+    public $timestamps = false;
+
+    protected $guarded = [];
+
     public static function getBuyerInfoDB($app_no)
     {
         $details = DB::table('buyer')

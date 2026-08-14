@@ -3,6 +3,7 @@
 namespace App\Models\services;
 
 use App\Models\LandScheduleModel;
+use App\Models\SellerModel;
 use App\Services\LocationService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -18,24 +19,33 @@ class CommonModel extends Model
     }
 
     public function getLandScheduleDetails(string $app_no) {
-        $details = DB::table($this->table)
-        ->where('appno', $app_no)
-        ->get();
+        $landScheduleTable = (new LandScheduleModel)->getTable();
+        $sellerTable = (new SellerModel)->getTable();
+
+        $details = LandScheduleModel::query()
+        ->leftJoin(
+            $sellerTable,
+            "$landScheduleTable.appno",
+            '=',
+            "$sellerTable.appno"
+        )
+        ->where("$landScheduleTable.appno", $app_no)
+        ->get(["$landScheduleTable.*", "$sellerTable.village_uuid"]);
 
         $result = [];
 
-        if(!$details->isEmpty()) {
-            foreach ($details as $row) {
-                $dist_code = $row->distcode;
-                $subdiv_code = $row->subcode;
-                $cir_code = $row->circode;
-                $mouza_pargona_code = $row->mouzacode;
-                $lot_no = $row->lotno;
-                $vill_townprt_code = $row->villcode;
+        if(isset($details) && !empty($details->toArray())) {
+            foreach ($details->toArray() as $row) {
+                $dist_code = $row['distcode'];
+                $subdiv_code = $row['subcode'];
+                $cir_code = $row['circode'];
+                $mouza_pargona_code = $row['mouzacode'];
+                $lot_no = $row['lotno'];
+                $vill_townprt_code = $row['villcode'];
                 $locationId = $dist_code . $subdiv_code . $cir_code . $mouza_pargona_code . $lot_no . $vill_townprt_code;
-                $row->location_id = $locationId;
+                $row['location_id'] = $locationId;
 
-                $village_uuid = "10000000004531";
+                $village_uuid = $row['village_uuid'];
                 $locations = $this->locationService->getLocationFromVillageUuid($village_uuid);
                 if(!$locations['success']) {
                     return [
@@ -59,10 +69,23 @@ class CommonModel extends Model
                 $lot_uuid = $data['lot_uuid'];
                 $village_uuid = $data['uuid'];
 
-                
-
-                $land_class_code = $row->landclass;
+                $land_class_code = $row['landclass'];
                 $land_class_name = "";
+
+                $row['dist_name'] = $dist_name;
+                $row['subdiv_name'] = $subdiv_name;
+                $row['cir_name'] = $cir_name;
+                $row['mouza_pargona_name'] = $mouza_pargona_name;
+                $row['lot_name'] = $lot_name;
+                $row['vill_townprt_name'] = $vill_townprt_name;
+                $row['district_uuid'] = $district_uuid;
+                $row['subdivision_uuid'] = $subdivision_uuid;
+                $row['circle_uuid'] = $circle_uuid;
+                $row['mouza_uuid'] = $mouza_uuid;
+                $row['lot_uuid'] = $lot_uuid;
+                $row['land_class_name'] = $land_class_name;
+
+
 
 
 
